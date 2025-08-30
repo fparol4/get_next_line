@@ -1,0 +1,8 @@
+PRIMEIRA LINHA
+SEGUNDA LINHA
+
+
+texto, that's the file first line.
+And it will be the next \\n But now we are on the third line.
+And here is the last, but not yet...
+final.
