@@ -1,5 +1,2 @@
-LINE ONE;
-LINE TWO;
-LINE TREE ---;
----;
-LINE FOUR;
+LINE_1;
+LINE_2;

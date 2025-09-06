@@ -1,56 +1,103 @@
 #include "get_next_line.h"
+#include <stddef.h>
 
 #define FILE_NAME "text.txt"
 
-char	*ft_mvcursor(char *buffer, size_t n)
+int		f_cropidx(char *buffer)
 {
-	int		size_r; 
-	int		size_b;
+	int i;	
+
+	i = 0;
+	while (buffer && buffer[i])
+	{
+		if (buffer[i] == '\n')
+			break;
+		i++;
+	}
+	return (i);
+}
+
+char	*f_mvcursor(char *buffer)
+{
+	int		remaining_s;
+	int		crop_idx;
 	char	*buffer_u;
 
-	size_b = f_strlen(buffer);
-	size_r = size_b - n; // SIZE_BUFFER - IDX 
-	buffer_u = malloc((size_r) * sizeof(char));
+	crop_idx = f_cropidx(buffer);
+	if (!crop_idx)
+		return (NULL);
+
+	remaining_s = f_strlen(buffer + crop_idx + 1);
+	if (!remaining_s)
+	{
+		free(buffer);
+		return (NULL);
+	}
+
+	buffer_u = malloc((remaining_s + 1) * sizeof(char));
 	if (!buffer_u)
-		panic("cannot allocate");
-	printf("B: %s", buffer);
-	f_strlcpy(buffer_u, buffer + n, n);
-	printf("CURSOR: %s\n", buffer_u);
-	panic("here");
+		panic("MALLOC CURSOR");
+
+	f_strlcpy(buffer_u, buffer + crop_idx + 1, remaining_s + 1);
+	free(buffer);
+	return (buffer_u);
+}
+
+char	*f_extract_line(char *buffer)
+{
+	int		crop_idx;
+	char	*buffer_l;
+	
+	crop_idx = f_cropidx(buffer);
+	if (crop_idx == 0)
+		return (NULL);
+
+	buffer_l = malloc ((crop_idx + 1) * sizeof(char));
+	if (!buffer_l)
+		panic("MALLOC LINE");
+
+	f_strlcpy(buffer_l, buffer, (crop_idx + 1));
+	return (buffer_l);
 }
 
 char *ft_get_next_line(int fd)
 {
 	int			read_bytes;
 	char		*chunk;
-	char		*p_linebreak;
+	char		*line;
 	static char	*buffer;
 
 	chunk = (char *) malloc (BUFFER_SIZE * sizeof(char));
 	if (!chunk)
 		panic("chunk cannot be allocated");
 
-	read_bytes = read(fd, chunk, BUFFER_SIZE);
-	if (read_bytes == 0)
-		return (NULL);
+	read_bytes = read(fd, chunk, 12);
 	if (read_bytes == -1)
-		panic("reading file");
-	
+		panic("READING FILE");
+	chunk[read_bytes] = '\0';
+
 	buffer = f_concat(buffer, chunk);
-	p_linebreak = f_search(buffer, '\n');
-	if (p_linebreak)
+	if (read_bytes == 0 || f_search(buffer, '\n'))
 	{
-		buffer = ft_mvcursor(buffer, (p_linebreak - buffer) + 1);
+		line = f_extract_line(buffer);
+		buffer = f_mvcursor(buffer);
+		printf("BF: '%s'\n", buffer);
+		return (line);
 	}
-	return buffer;
+
+	return (ft_get_next_line(fd));
 }
 
 int main(void) {
 	int file = open(FILE_NAME, O_RDWR);
 	if (!file)
-		panic("file cannot be readed");
-	char *line = ft_get_next_line(file);
-	free(line);
+		panic("READING FILE");
+	for (int i = 1; i <= 3; i++) {
+		char *line = ft_get_next_line(file);
+		printf("LINE: %s\n", line);
+		// panic("42");
+		free(line);
+	}
 	close(file);
 	return -1;
 }

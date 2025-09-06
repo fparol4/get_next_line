@@ -18,5 +18,5 @@ size_t	f_strlcpy(char *dst, const char *src, size_t n);
 #endif
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 32
+#define BUFFER_SIZE 12
 #endif
