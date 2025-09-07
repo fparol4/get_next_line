@@ -12,11 +12,11 @@
 
 #include "get_next_line.h"
 
-int	f_strlen(char *str)
+int	f_strlen(const char *str)
 {
 	int	len;
 
-	if (str == NULL)
+	if (!str)
 		return (0);
 	len = 0;
 	while (str[len])
@@ -37,37 +37,37 @@ char	*f_search(char *s, char c)
 	return (NULL);
 }
 
-char	*f_concat(char *buffer, char *chunk)
+char	*f_concat(char *src, char *add)
 {
 	int		i;
-	int		size_b;
+	int		size_o;
 	int		size_c;
-	char	*buffer_c;
+	char	*buffer;
 
-	size_b = f_strlen(buffer);
-	size_c = f_strlen(chunk);
-	if (size_b == 0 && size_c == 0)
+	size_o = f_strlen(src);
+	size_c = f_strlen(add);
+	if (size_o == 0 && size_c == 0)
 	{
-		free(chunk);
-		free(buffer);
+		free(src);
+		free(add);
 		return (NULL);
 	}
-	buffer_c = calloc((size_b + size_c + 2), sizeof(char));
-	if (buffer_c == NULL)
+	buffer = malloc((size_o + size_c + 1) * sizeof(char));
+	if (buffer == NULL)
 		return (NULL);
 	i = 0;
-	while (i++ < size_b)
-		buffer_c[i - 1] = buffer[i - 1];
+	while (i++ < size_o)
+		buffer[i - 1] = src[i - 1];
 	i = 0;
 	while (i++ < size_c)
-		buffer_c[i - 1 + size_b] = chunk[i - 1];
-	buffer_c[i + size_b] = '\0';
-	free(buffer);
-	free(chunk);
-	return (buffer_c);
+		buffer[i - 1 + size_o] = add[i - 1];
+	buffer[i + size_o] = '\0';
+	free(src);
+	free(add);
+	return (buffer);
 }
 
-size_t	f_strlcpy(char *dst, char *src, size_t n)
+size_t	f_strlcpy(char *dst, const char *src, size_t n)
 {
 	size_t	i;
 	size_t	s_len;

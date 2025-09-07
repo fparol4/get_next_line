@@ -18,7 +18,7 @@
 # define FILE_NAME "text.txt"
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 48
+#  define BUFFER_SIZE 17
 # endif
 
 // required-libs
@@ -28,10 +28,9 @@
 
 // utils
 void	panic(char *s);
-int		f_strlen(char *str);
+int		f_strlen(const char *str);
 char	*f_search(char *s, char c);
 char	*f_concat(char *original, char *chunk);
-size_t	f_strlcpy(char *dst, char *src, size_t n);
-char	*get_next_line(int fd);
+size_t	f_strlcpy(char *dst, const char *src, size_t n);
 
 #endif
