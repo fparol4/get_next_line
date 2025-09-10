@@ -32,5 +32,6 @@ int		f_strlen(const char *str);
 char	*f_search(char *s, char c);
 char	*f_concat(char *original, char *chunk);
 size_t	f_strlcpy(char *dst, const char *src, size_t n);
+char	*get_next_line(int fd);
 
 #endif

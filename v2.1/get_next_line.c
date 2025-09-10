@@ -61,21 +61,21 @@ char	*f_extract_line(char *buffer)
 	crop_idx = f_cropidx(buffer);
 	if (crop_idx == 0 && f_strlen(buffer) == 0)
 		return (NULL);
-	buffer_l = malloc ((crop_idx + 1) * sizeof(char));
+	buffer_l = malloc ((crop_idx + 2) * sizeof(char));
 	if (!buffer_l)
 		return (NULL);
 	f_strlcpy(buffer_l, buffer, (crop_idx + 2));
 	return (buffer_l);
 }
 
-char	*ft_get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	int			read_bytes;
 	char		*chunk;
 	char		*line;
 	static char	*buffer;
 
-	chunk = (char *) malloc (BUFFER_SIZE * sizeof(char));
+	chunk = (char *) malloc ((BUFFER_SIZE * sizeof(char))+ 1);
 	if (chunk == NULL)
 		return (NULL);
 	read_bytes = read(fd, chunk, BUFFER_SIZE);
@@ -86,25 +86,28 @@ char	*ft_get_next_line(int fd)
 		return (NULL);
 	}
 	chunk[read_bytes] = '\0';
+	// printf("CHUNK: %s@\n", chunk);
 	buffer = f_concat(buffer, chunk);
+	// printf("BUFFER: %s@\n", buffer);
 	if (read_bytes == 0 || f_search(buffer, '\n'))
 	{
 		line = f_extract_line(buffer);
 		buffer = f_mvcursor(buffer);
+		// printf("BUFFER_AFTER: %s@\n", buffer);
 		return (line);
 	}
-	return (ft_get_next_line(fd));
+	return (get_next_line(fd));
 }
 
-int main(void) {
-	int file = open(FILE_NAME, O_RDWR);
-
-	for (int i = 1; i <= 9; i++) {
-		char *line = ft_get_next_line(file);
-		printf("R: %s \n--\n", line);
-		free(line);
-	}
-
-	close(file);
-	return 0;
-}
+// int main(void) {
+// 	int file = open(FILE_NAME, O_RDWR);
+//
+// 	for (int i = 1; i <= 8; i++) {
+// 		char *line = get_next_line(file);
+// 		printf("R: %s@\n", line);
+// 		free(line);
+// 	}
+//
+// 	close(file);
+// 	return 0;
+// }

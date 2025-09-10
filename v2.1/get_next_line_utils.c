@@ -16,7 +16,7 @@ int	f_strlen(const char *str)
 {
 	int	len;
 
-	if (!str)
+	if (str == NULL)
 		return (0);
 	len = 0;
 	while (str[len])
@@ -37,34 +37,40 @@ char	*f_search(char *s, char c)
 	return (NULL);
 }
 
-char	*f_concat(char *src, char *add)
+char	*f_concat(char *buffer, char *chunk)
 {
 	int		i;
-	int		size_o;
+	int		size_b;
 	int		size_c;
-	char	*buffer;
+	char	*buffer_u;
 
-	size_o = f_strlen(src);
-	size_c = f_strlen(add);
-	if (size_o == 0 && size_c == 0)
+	size_b = f_strlen(buffer);
+	size_c = f_strlen(chunk);
+	if (size_b == 0 && size_c == 0)
 	{
-		free(src);
-		free(add);
+		free(buffer);
+		free(chunk);
 		return (NULL);
 	}
-	buffer = malloc((size_o + size_c + 1) * sizeof(char));
-	if (buffer == NULL)
+	buffer_u = malloc((size_b + size_c + 1) * sizeof(char));
+	if (buffer_u == NULL)
 		return (NULL);
 	i = 0;
-	while (i++ < size_o)
-		buffer[i - 1] = src[i - 1];
+	while (i < size_b)
+	{
+		buffer_u[i] = buffer[i];
+		i++;
+	}
 	i = 0;
-	while (i++ < size_c)
-		buffer[i - 1 + size_o] = add[i - 1];
-	buffer[i + size_o] = '\0';
-	free(src);
-	free(add);
-	return (buffer);
+	while (i < size_c)
+	{
+		buffer_u[i + size_b] = chunk[i];
+		i++;
+	}
+	buffer_u[i + size_b] = '\0';
+	free(buffer);
+	free(chunk);
+	return (buffer_u);
 }
 
 size_t	f_strlcpy(char *dst, const char *src, size_t n)
