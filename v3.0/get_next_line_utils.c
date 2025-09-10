@@ -58,8 +58,10 @@ char *f_concat(char *buffer, char *chunk) {
   int size_c;
   char *concat_b;
 
-  if (chunk == NULL)
+  if (chunk == NULL) {
+    free(chunk);
     return (buffer);
+  }
   size_b = f_strlen(buffer);
   size_c = f_strlen(chunk);
   if (size_b == 0 && size_b == size_c)
@@ -74,12 +76,13 @@ char *f_concat(char *buffer, char *chunk) {
   while (i++ < size_c)
     concat_b[(i - 1) + size_b] = chunk[i - 1];
   concat_b[i + size_b - 1] = '\0';
+  free(buffer);
+  free(chunk);
   return (concat_b);
 }
 
 char *f_strlcpy(char *buffer, char *chunk, size_t size) {
   size_t i;
-  size_t chunk_s;
 
   i = 0;
   while (chunk[i] && i < (size - 1)) {

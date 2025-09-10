@@ -1,4 +1,4 @@
-#include "get_next_line.h"
+#include "../get_next_line.h"
 
 void __T1__f_concat() {
   char *b = f_calloc(3, sizeof(char));
