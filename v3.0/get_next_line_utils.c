@@ -52,20 +52,26 @@ void *f_calloc(size_t count, size_t size) {
   return (p);
 }
 
+char *f_strlcpy(char *buffer, char *chunk, size_t size) {
+  size_t i;
+
+  i = 0;
+  while (chunk[i] && i < (size - 1)) {
+    buffer[i] = chunk[i];
+    i++;
+  }
+  buffer[i] = 0;
+  return (buffer);
+}
+
 char *f_concat(char *buffer, char *chunk) {
   int i;
   int size_b;
   int size_c;
   char *concat_b;
 
-  if (chunk == NULL) {
-    free(chunk);
-    return (buffer);
-  }
   size_b = f_strlen(buffer);
   size_c = f_strlen(chunk);
-  if (size_b == 0 && size_b == size_c)
-    return (NULL);
   concat_b = f_calloc((size_b + size_c + 1), sizeof(char));
   if (concat_b == NULL)
     return (NULL);
@@ -81,14 +87,4 @@ char *f_concat(char *buffer, char *chunk) {
   return (concat_b);
 }
 
-char *f_strlcpy(char *buffer, char *chunk, size_t size) {
-  size_t i;
 
-  i = 0;
-  while (chunk[i] && i < (size - 1)) {
-    buffer[i] = chunk[i];
-    i++;
-  }
-  buffer[i] = 0;
-  return (buffer);
-}

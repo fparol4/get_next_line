@@ -65,30 +65,25 @@ char *get_next_line(int fd) {
 
   if (fd == 0)
     return (NULL);
-  chunk = f_calloc(BUFFER_SIZE + 1, sizeof(char));
+
+  chunk = f_calloc(BUFFER_SIZE, sizeof(char));
   if (chunk == NULL)
     return (NULL);
+
   readed = read(fd, chunk, BUFFER_SIZE);
   if (readed == -1)
     return (NULL);
   chunk[readed] = '\0';
-  // printf("r: %d\n", readed);
-  // printf("b: %s\n", buffer);
+
+  if (readed == 0 && buffer == NULL)
+    return (NULL);
+
   buffer = f_concat(buffer, chunk);
-  // printf("c: %s\n", chunk);
-  // printf("ab: %s\n", buffer);
 
   if (readed == 0 || f_search(buffer, '\n')) {
     crop_idx = f_cropidx(buffer);
-    // printf("ci: %d\n", crop_idx);
-    // if (crop_idx == 0) {
-    //   free(chunk);
-    //   free(buffer);
-    //   return (NULL);
-    // }
     line = f_extract(buffer, crop_idx);
     buffer = f_mvcursor(buffer, crop_idx);
-    printf("rb: %s\n", buffer);
     return (line);
   }
   return (get_next_line(fd));
