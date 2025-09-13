@@ -15,7 +15,7 @@
 
 #define FILE_NAME "text.txt"
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 16
+#define BUFFER_SIZE 24
 #endif
 
 #include <stdio.h>
@@ -25,14 +25,14 @@
 #include <unistd.h>
 
 /* functions */
-int f_strlen(char *str);
-char *f_search(char *buffer, char c);
-void *f_calloc(size_t count, size_t size);
-char *f_concat(char *buffer, char *chunk);
-char *f_strlcpy(char *buffer, char *chunk, size_t size);
-size_t f_cropidx(char *buffer);
-char *f_mvcursor(char *buffer, int idx);
-char *f_extract(char *buffer, int idx);
-char *get_next_line(int fd);
+// int f_strlen(char *str);
+// char *f_search(char *buffer, char c);
+// void *f_calloc(size_t count, size_t size);
+// char *f_concat(char *buffer, char *chunk);
+// char *f_strlcpy(char *buffer, char *chunk, size_t size);
+// // size_t f_cropidx(char *buffer);
+// // char *f_mvcursor(char *buffer, int idx);
+// // char *f_extract(char *buffer, int idx);
+// char *get_next_line(int fd);
 
 #endif

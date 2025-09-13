@@ -87,4 +87,143 @@ char *f_concat(char *buffer, char *chunk) {
   return (concat_b);
 }
 
+int f_cropidx(char *buffer) {
+  int i = 0;
+  while (buffer[i]) {
+    if (buffer[i] == '\n')
+      return (i);
+    i++;
+  }
+  return (i);
+}
 
+char *f_cropline(char *buffer, int idx)
+{
+  if (buffer == NULL)
+    return (NULL);
+
+  if (buffer[idx] == '\0') {
+    return (buffer);
+  }
+
+  char *line = f_calloc(idx + 2, sizeof(char)); 
+  if (line == NULL)
+    return (NULL);
+  int i = 0;
+  while (i++ <= idx)
+    line[i - 1] = buffer[i - 1];
+  line[i] = '\0';
+  return (line);
+}
+
+
+char  *f_mvcursor(char *buffer, int idx)
+{
+  if (buffer[idx] == '\0') {
+    free(buffer);
+    return (NULL);
+  }
+
+  int size_r = f_strlen(buffer + (idx + 1));
+  if (size_r == 0) {
+    free(buffer);
+    return (NULL);
+  }
+
+  char *remain = f_calloc(size_r + 1, sizeof(char));
+
+  int i = 0;
+  while (i++ < size_r)
+    remain[i - 1] = buffer[i + idx];
+  remain[i - 1] = '\0'; 
+
+  free(buffer);
+  return remain;
+}
+
+
+char *f_cropline2(char *buffer, int idx)
+{
+  if (buffer == NULL)
+    return (NULL);
+
+  if (idx == 0 || buffer[idx] == '\0')
+    return (buffer);
+
+  // printf("BUFFER: %s$, IDX: %d\n", buffer, idx + 2);
+  printf("ALLOC: %d\n", idx + 2);
+  char *line = f_calloc((idx + 2), sizeof(char));
+  int i = 0;
+  while (i++ <= idx)
+    line[i - 1] = buffer[i - 1];
+  line[i - 1] = '\0';
+  return(line);
+}
+
+char *f_get_next_line(int fd)
+{
+  static char *buffer;
+  // printf("--TIMES--\n");
+
+  if (fd == 0)
+       return (NULL);
+  
+  char *chunk = f_calloc(BUFFER_SIZE + 1, sizeof(char));
+
+  if (chunk == NULL) {
+    if (buffer != NULL)
+      free(buffer);
+    return (NULL);
+  }
+  
+  int readed = read(fd, chunk, BUFFER_SIZE);
+  if (readed == -1) {
+    // free(chunk); // maybe unecessary
+    if (buffer != NULL)
+      free(buffer);
+    return (NULL);
+  }
+  chunk[readed] = '\0';
+
+  // printf("C: %s$\n", chunk);
+  // int idx = f_cropidx(chunk);
+  // printf("IDX: %d\n", idx);
+  // char *l = f_cropline2(chunk, idx);
+  // printf("L: %s$", l);
+  // free(l);
+  // return (chunk);
+
+  // ----
+  if (readed == 0 && buffer == NULL)
+  {
+      free(chunk);
+      return (NULL);
+  }
+
+  buffer = f_concat(buffer, chunk);
+  printf("BUFFER BF: %s$", buffer);
+  if (readed == 0 || f_search(buffer, '\n') != 0) {
+    int cropidx = f_cropidx(buffer);
+    char *line = f_cropline2(buffer, cropidx);
+    if (buffer[cropidx] == '\0') {
+      free(buffer);
+      return (NULL);
+    } 
+    buffer = f_mvcursor(buffer, cropidx);
+    // free(buffer);
+    return (line);
+  } 
+  return (f_get_next_line(fd));
+}
+
+int main()
+{
+  int fd = open(FILE_NAME, O_RDWR);
+  for (int i = 0; i <= 21; ++i)
+  {
+    char *l = f_get_next_line(fd);
+    printf("L: %s\n", l);
+    free(l);
+  }
+  close(fd);
+}
