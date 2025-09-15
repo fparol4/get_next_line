@@ -33,4 +33,10 @@ void	*fn_calloc(size_t count, size_t size);
 char	*fn_string(char *source, size_t size);
 int		fn_cropidx(char	*buffer);
 
+/* get_next_line.c */
+char	*fn_concat(char *buffer, char *chunk);
+char	*fn_crop(char *buffer, size_t idx);
+char	*fn_movecursor(char	*buffer, size_t idx);
+char	*get_next_line(int fd);
+
 #endif

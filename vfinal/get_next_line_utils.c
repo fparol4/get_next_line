@@ -42,7 +42,7 @@ int	fn_isline(char *buffer)
 
 void	*fn_calloc(size_t count, size_t size)
 {
-	int		i;
+	size_t		i;
 	char	*allocated;
 
 	allocated = malloc(count * size);
@@ -82,8 +82,9 @@ int	fn_cropidx(char	*buffer)
 {
 	size_t	idx;
 
-	if (fn_strlen(buffer) == 0)
-		return (0);
+	if (buffer == NULL)
+		return (-1);
+	idx = 0;
 	while (buffer[idx])
 	{
 		if (buffer[idx] == '\n')
