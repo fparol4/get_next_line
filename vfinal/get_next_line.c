@@ -11,85 +11,53 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <string.h>
 
-size_t	fn_strlen(char *buffer)
+void	*fn_clean(char *buffers[], size_t size)
 {
-	int	i;
+	size_t	i;	
 
-	if (buffer == NULL)
-		return (0);
 	i = 0;
-	while (buffer[i])
-		++i;
-	return (i);
+	while (i++ < size)
+		free(buffers[i - 1]);
+	return (NULL);
 }
 
-int	fn_isline(char *buffer)
-{
-	int	i;
-
-	if (buffer == NULL)
-		return (0);
-	i = 0;
-	while (buffer[i])
-	{
-		if (buffer[i] == '\n')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void	*fn_calloc(size_t count, size_t size)
-{
-	int		i;
-	char	*allocated;
-
-	allocated = malloc(count * size);
-	if (allocated == NULL)
-		return (NULL);
-	i = 0;
-	while (i < count)
-	{
-		allocated[i] = 0;
-		i++;
-	}
-	return ((void *) allocated);
-}
-
-char	*fn_string(char *source, size_t size)
+char	*ft_concat(char *buffer, char *chunk)
 {
 	size_t	i;
-	size_t	len;
-	char	*str;
+	size_t	s_chunk;
+	size_t	s_buffer;
+	size_t	s_concated;
+	char	*b_concated;
 
-	len = fn_strlen(source);
-	if (len > size)
-		len = size;
-	str = fn_calloc(len, sizeof(char));
+	s_chunk = fn_strlen(chunk); 
+	s_buffer = fn_strlen(buffer);
+	if (s_chunk == 0)
+	{
+		fn_clean((char*[]){ chunk }, 1);
+		return (buffer);
+	}
+	s_concated = s_chunk + s_buffer + 1;
+	b_concated = fn_calloc(s_concated, sizeof(char));
+	if (b_concated == NULL)
+		return fn_clean((char*[]){ buffer, chunk }, 2);
 	i = 0;
-	while (i < len)
-	{
-		str[i] = source[i];
-		i++;
-	}
-	return (str);
+	while (i++ < s_buffer)
+		b_concated[i - 1] = buffer[i - 1];
+	i = 0;
+	while (i++ < s_concated)
+		b_concated[i - 1] = chunk[i - 1];
+	b_concated[i - 1] = '\0';
+	fn_clean((char*[]){ buffer, chunk }, 2);
+	return (b_concated);
 }
 
-int	fn_cropidx(char	*buffer)
+char	*fn_movecursor(char	*buffer, char idx)
 {
-	size_t	idx;
-
-	if (fn_strlen(buffer) == 0)
-		return (0);
-	while (buffer[idx])
-	{
-		if (buffer[idx] == '\n')
-			return (idx);
-		++idx;
-	}
-	return (idx);
+	if (buffer == NULL)
+		return (NULL);
+	return (NULL);
 }
 
-// int	main(){}
+int	main() {
+}
