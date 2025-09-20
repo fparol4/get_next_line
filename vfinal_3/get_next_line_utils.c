@@ -16,8 +16,6 @@ size_t	fn_strlen(char *buffer)
 {
 	int	i;
 
-	if (buffer == NULL)
-		return (0);
 	i = 0;
 	while (buffer[i])
 		++i;
@@ -28,8 +26,6 @@ int	fn_isline(char *buffer)
 {
 	int	i;
 
-	if (buffer == NULL)
-		return (0);
 	i = 0;
 	while (buffer[i])
 	{
@@ -86,7 +82,7 @@ int	fn_cropidx(char	*buffer)
 	while (buffer[idx])
 	{
 		if (buffer[idx] == '\n')
-			return (idx);
+			return (idx + 1);
 		++idx;
 	}
 	return (idx);

@@ -66,7 +66,7 @@ char	*fn_crop(char *buffer, size_t idx)
 	b_size = idx;
 	if (buffer[idx] == '\n')
 		b_size += 1;
-	b_crop = fn_calloc(b_size + 1, 1);
+	b_crop = fn_calloc(b_size + 1, sizeof(char));
 	i = 0;
 	while (i++ < b_size)
 		b_crop[i - 1] = buffer[i - 1];
@@ -139,23 +139,23 @@ char	*get_next_line(int fd)
 	return (get_next_line(fd));
 }
 
-// int	__T_01__() {
-// 	int fd	= open("text.txt", O_RDONLY);
-// 	for (int i = 1; i <= 12; ++i) {
-// 		char *l = get_next_line(fd);
-// 		printf("L: %s$\n", l);
-// 		free(l);
-// 	}
-// 	close(fd);
-// }
-//
-// int	main()
-// {
-// 	__T_01__();
-// 	// char *b = fn_string("orange", -1);
-// 	// char *d = fn_string("apple", -1);
-// 	// char *r = fn_concat(b, d);
-// 	// printf("R: %s$\n", r);
-// 	// fn_clean((char*[]){ r }, 1);
-//
-// }
+int	__T_01__() {
+	char *files[] = {
+		"text.txt",
+		"big_line.txt",
+		"read_error.txt",
+		"lines_around_10.txt"
+	};
+	int fd	= open(files[2], O_RDONLY);
+	for (int i = 1; i <= 12; ++i) {
+		char *l = get_next_line(fd);
+		printf("L: %s$\n", l);
+		free(l);
+	}
+	close(fd);
+}
+
+int	main()
+{
+	__T_01__();
+}
