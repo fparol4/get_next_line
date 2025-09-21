@@ -35,7 +35,7 @@ int		fn_cropidx(char	*buffer);
 
 /* get_next_line.c */
 char	*fn_concat(char *buffer, char *chunk);
-char	*fn_crop(char *buffer);
+char	*fn_cropline(char *buffer);
 char	*fn_remain(char	*buffer);
 char	*get_next_line(int fd);
 
